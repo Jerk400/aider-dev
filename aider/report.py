@@ -7,6 +7,8 @@ import webbrowser
 from aider import __version__
 from aider.urls import github_issues
 
+FENCE = "`" * 3
+
 
 def report_github_issue(issue_text, title=None):
     """
@@ -29,7 +31,7 @@ def report_github_issue(issue_text, title=None):
     print(issue_text.strip())
     print()
     print("Please consider reporting this bug to help improve aider!")
-    prompt = "Report this as a GitHub Issue using your browser? (Y/n) "
+    prompt = "Open a GitHub Issue pre-filled with the above error in your browser? (Y/n) "
     confirmation = input(prompt).strip().lower()
 
     yes = not confirmation or confirmation.startswith("y")
@@ -75,15 +77,14 @@ def exception_handler(exc_type, exc_value, exc_traceback):
 
     tb_text = "".join(tb_lines_with_basenames)
 
-    # Find the first non-frozen frame
-    while exc_traceback:
-        filename = exc_traceback.tb_frame.f_code.co_filename
-        if not filename.startswith("<frozen "):
-            break
-        exc_traceback = exc_traceback.tb_next
+    # Find the innermost frame
+    innermost_tb = exc_traceback
+    while innermost_tb.tb_next:
+        innermost_tb = innermost_tb.tb_next
 
-    # Get the filename and line number
-    line_number = exc_traceback.tb_lineno
+    # Get the filename and line number from the innermost frame
+    filename = innermost_tb.tb_frame.f_code.co_filename
+    line_number = innermost_tb.tb_lineno
     try:
         basename = os.path.basename(filename)
     except Exception:
@@ -93,7 +94,7 @@ def exception_handler(exc_type, exc_value, exc_traceback):
     exception_type = exc_type.__name__
 
     # Prepare the issue text
-    issue_text = f"An uncaught exception occurred:\n\n```\n{tb_text}\n```"
+    issue_text = f"An uncaught exception occurred:\n\n{FENCE}\n{tb_text}\n{FENCE}"
 
     # Prepare the title
     title = f"Uncaught {exception_type} in {basename} line {line_number}"
@@ -112,9 +113,20 @@ def report_uncaught_exceptions():
     sys.excepthook = exception_handler
 
 
+def dummy_function1():
+    def dummy_function2():
+        def dummy_function3():
+            raise ValueError("boo")
+
+        dummy_function3()
+
+    dummy_function2()
+
+
 def main():
     report_uncaught_exceptions()
-    raise ValueError("boo")
+
+    dummy_function1()
 
     title = None
     if len(sys.argv) > 2:
