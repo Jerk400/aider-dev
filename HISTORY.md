@@ -1,6 +1,80 @@
 
 # Release history
 
+### Aider v0.56.0
+
+- Enables prompt caching for Sonnet via OpenRouter by @fry69
+- Enables 8k output tokens for Sonnet via VertexAI and DeepSeek V2.5.
+- New `/report` command to open your browser with a pre-populated GitHub Issue.
+- New `--chat-language` switch to set the spoken language.
+- Now `--[no-]suggest-shell-commands` controls both prompting for and offering to execute shell commands.
+- Check key imports on launch, provide helpful error message if dependencies aren't available.
+- Renamed `--models` to `--list-models` by @fry69.
+- Numerous bug fixes for corner case crashes.
+- Aider wrote 56% of the code in this release.
+
+### Aider v0.55.0
+
+- Only print the pip command when self updating on Windows, without running it.
+- Converted many error messages to warning messages.
+- Added `--tool-warning-color` setting.
+- Blanket catch and handle git errors in any `/command`.
+- Catch and handle glob errors in `/add`, errors writing files.
+- Disabled built in linter for typescript.
+- Catch and handle terminals which don't support pretty output.
+- Catch and handle playwright and pandoc errors.
+- Catch `/voice` transcription exceptions, show the WAV file so the user can recover it.
+- Aider wrote 53% of the code in this release.
+
+### Aider v0.54.12
+
+- Switched to `vX.Y.Z.dev` version naming.
+
+### Aider v0.54.11
+
+- Improved printed pip command output on Windows.
+
+### Aider v0.54.10
+
+- Bugfix to test command in platform info.
+
+### Aider v0.54.9
+
+- Include important devops files in the repomap.
+- Print quoted pip install commands to the user.
+- Adopt setuptools_scm to provide dev versions with git hashes.
+- Share active test and lint commands with the LLM.
+- Catch and handle most errors creating new files, reading existing files.
+- Catch and handle most git errors.
+- Added --verbose debug output for shell commands.
+
+### Aider v0.54.8
+
+- Startup QOL improvements:
+  - Sanity check the git repo and exit gracefully on problems.
+  - Pause for confirmation after model sanity check to allow user to review warnings.
+- Bug fix for shell commands on Windows.
+- Do not fuzzy match filenames when LLM is creating a new file, by @ozapinq
+- Numerous corner case bug fixes submitted via new crash report -> GitHub Issue feature.
+- Crash reports now include python version, OS, etc.
+
+### Aider v0.54.7
+
+- Offer to submit a GitHub issue pre-filled with uncaught exception info.
+- Bugfix for infinite output.
+
+### Aider v0.54.6
+
+- New `/settings` command to show active settings.
+- Only show cache warming status update if `--verbose`.
+
+### Aider v0.54.5
+
+- Bugfix for shell commands on Windows.
+- Refuse to make git repo in $HOME, warn user.
+- Don't ask again in current session about a file the user has said not to add to the chat.
+- Added `--update` as an alias for `--upgrade`.
+
 ### Aider v0.54.4
 
 - Bugfix to completions for `/model` command.
